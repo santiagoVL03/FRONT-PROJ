@@ -1,9 +1,9 @@
-import Feed from "./Feed"
+import LoginForm from "../components/LoginForm"
 function Login() {
   return (
     <div className="flex items-center justify-center">
       <div>
-        <Feed />
+        <LoginForm />
       </div>
     </div>
   )

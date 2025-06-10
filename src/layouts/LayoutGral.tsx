@@ -4,7 +4,7 @@ type LayoutProps = {
   children: ReactNode;
 };
 
-function Layout({ children }: LayoutProps) {
+function LayoutGral({ children }: LayoutProps) {
   return (
     <div className='flex flex-col min-h-screen'>
         <header className='bg-gray-800 p-4 text-white'>
@@ -18,11 +18,6 @@ function Layout({ children }: LayoutProps) {
                     {children}
                 </div>
             </main>
-            <aside className='w-full md:w-64 p-4 bg-gray-200 order-1 md:order-2'>
-                <div>
-                    Sidebar
-                </div>
-            </aside>
         </div>
         <footer className='bg-gray-500 p-4 text-white'>
             <small>&copy; 2025 All Rights Reserved</small>
@@ -31,4 +26,4 @@ function Layout({ children }: LayoutProps) {
   )
 }
 
-export default Layout
+export default LayoutGral

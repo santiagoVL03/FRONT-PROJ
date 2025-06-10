@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Layout from './components/Layout'
+import LayoutGral from './layouts/LayoutGral'
 import Login from './pages/Login'
 import Feed from './pages/Feed'
+import LayoutFeed from './layouts/LayoutFeed'
+import Sidebar from './pages/Sidebar';
 
 function App() {
   return (
@@ -9,23 +11,25 @@ function App() {
       <Routes>
         <Route path="/" element=
           {
-            <Layout>
+            <LayoutGral>
               <Home />
-            </Layout>
+            </LayoutGral>
           }
         />
         <Route path="/login" element=
           {
-            <Layout>
+            <LayoutGral>
               <Login />
-            </Layout>
+            </LayoutGral>
           }
         />
-        <Route path="/feed" element=
-          {
-            <Layout>
-              <Feed />
-            </Layout>
+        <Route
+          path="/feed"
+          element={
+            <LayoutFeed
+              mainContent={<Feed />}
+              sidebarContent={<Sidebar />}
+            />
           }
         />
       </Routes>
