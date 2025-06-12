@@ -1,6 +1,11 @@
 import { Heart, MessageCircle, Send } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 function Post({ username, imageId, description }: { username: string; imageId: number, description?: string }) {
+  const navigate = useNavigate();
+  const handleImageClick = () => {
+    navigate(`/comic`);
+  };
   return (
     <div className="max-w-md mx-auto bg-gray-900 rounded-2xl shadow-md overflow-hidden my-4 border border-gray-900 text-white">
       <div className="flex items-center px-4 py-3">
@@ -15,6 +20,7 @@ function Post({ username, imageId, description }: { username: string; imageId: n
       </div>
 
       <img
+        onClick={handleImageClick}
         className="w-full object-cover"
         src={`https://picsum.photos/seed/post${imageId}/600/400`}
         alt="post"

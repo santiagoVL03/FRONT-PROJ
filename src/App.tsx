@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import Feed from './pages/Feed'
 import LayoutFeed from './layouts/LayoutFeed'
 import Sidebar from './pages/Sidebar';
+import Comic from './pages/Comic'
 
 function App() {
   return (
@@ -28,6 +29,15 @@ function App() {
           element={
             <LayoutFeed
               mainContent={<Feed />}
+              sidebarContent={<Sidebar />}
+            />
+          }
+        />
+        <Route
+          path="/comic"
+          element={
+            <LayoutFeed
+              mainContent={<Comic />}
               sidebarContent={<Sidebar />}
             />
           }
