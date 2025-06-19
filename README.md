@@ -10,6 +10,7 @@
 - [Tecnologías Utilizadas](#tecnologías-utilizadas)
 - [API Externa - MangaDX](#api-externa---mangadx)
 - [Funcionalidades Implementadas](#funcionalidades-implementadas)
+- [Experiencia de Lectura](#experiencia-de-lectura)
 - [Capturas de Pantalla](#capturas-de-pantalla)
 - [Contribución](#contribución)
 - [Licencia](#licencia)
@@ -45,6 +46,12 @@ Convertirse en la plataforma líder para la comunidad de manga y comic, ofrecien
 - **Interacciones**: Sistema de likes, comentarios y compartidos
 - **Perfiles de Usuario**: Páginas personalizadas con colecciones favoritas
 - **Recomendaciones Sociales**: Sugerencias basadas en la actividad de la comunidad
+
+### 📖 Lector de Capítulos Inmersivo
+- **Vista de Lectura Completa**: Visualización página por página de capítulos completos
+- **Carga Optimizada**: Sistema de carga progresiva para mejor rendimiento
+- **Navegación Fluida**: Transición seamless entre páginas del manga
+- **Diseño Responsivo**: Experiencia de lectura optimizada para cualquier dispositivo
 
 ## 🏗️ Arquitectura Técnica
 
@@ -175,7 +182,51 @@ Funcionalidad completa para visualizar información detallada de cualquier manga
 - Lista completa de capítulos disponibles
 - Fechas de publicación
 
-**C. Sistema de Posts e Interacciones (Post.tsx)**
+**C. Lector de Capítulos Inmersivo (ChapterViewer.tsx)**
+
+**¡NUEVA FUNCIONALIDAD!** - La joya de la corona de LovArt: un lector de manga completamente funcional que transforma tu experiencia de lectura.
+
+**¿Qué hace especial a nuestro ChapterViewer?**
+
+Imagínate poder leer tu manga favorito directamente en la plataforma, sin necesidad de cambiar de página o abrir múltiples pestañas. Eso es exactamente lo que hace nuestro ChapterViewer.
+
+**Experiencia de Usuario:**
+1. **Acceso Directo**: Desde cualquier página de manga, haz clic en un capítulo
+2. **Carga Inteligente**: El sistema obtiene automáticamente todas las páginas del capítulo
+3. **Visualización Fluida**: Las páginas se muestran en una secuencia vertical perfecta
+4. **Calidad Original**: Imágenes en alta resolución directamente desde MangaDX
+
+**Tecnología Behind the Scenes:**
+```typescript
+// Obtención automática de páginas del capítulo
+const res = await axios.get(`https://api.mangadx.org/at-home/server/${chapterId}`);
+const { baseUrl, chapter } = res.data;
+
+// Construcción de URLs de imágenes optimizadas
+const images = chapter.data.map(
+  (filename: string) => `${baseUrl}/data/${chapter.hash}/${filename}`
+);
+```
+
+**Características Técnicas Avanzadas:**
+- **Lazy Loading**: Solo carga las imágenes cuando las necesitas
+- **Error Handling**: Manejo robusto de errores de conexión
+- **Responsive Design**: Se adapta perfectamente a móviles y desktop
+- **Cache Inteligente**: Optimiza la carga para una experiencia más rápida
+
+**Estados de la Aplicación:**
+- **Loading State**: Indicador elegante mientras se cargan las páginas
+- **Error State**: Mensaje amigable si algo sale mal
+- **Success State**: Experiencia de lectura inmersiva y fluida
+
+**¿Por qué es revolucionario?**
+Antes tenías que ir a múltiples sitios para leer manga. Ahora, LovArt centraliza todo:
+- **Descubres** manga en el feed
+- **Exploras** detalles en la página del comic
+- **Lees** directamente en la plataforma con ChapterViewer
+- **Interactúas** con otros fans en el mismo lugar
+
+**D. Sistema de Posts e Interacciones (Post.tsx)**
 
 **Funcionalidades de Interacción:**
 - **Likes**: Sistema de corazones para expresar gusto
@@ -188,7 +239,7 @@ Funcionalidad completa para visualizar información detallada de cualquier manga
 - **Posts Simulados**: Contenido local para demostrar funcionalidad social
 - **Posts de Usuario**: Preparado para contenido generado por usuarios
 
-**D. Recomendaciones y Descubrimiento**
+**E. Recomendaciones y Descubrimiento**
 
 **MiniReel Component:**
 - Grid de 3 columnas con contenido destacado
@@ -272,6 +323,7 @@ FRONT-PROJ/
 │   │   ├── MangaPost.tsx   # Posts de manga con API
 │   │   ├── Post.tsx        # Component base de posts
 │   │   ├── MiniProfile.tsx # Perfil usuario sidebar
+│   │   ├── ChapterViewer.tsx # 🆕 Lector de capítulos inmersivo
 │   │   └── ...
 │   ├── pages/              # Páginas principales  
 │   │   ├── Login.tsx       # Página de ingreso
@@ -388,32 +440,90 @@ const fetchMangaData = async () => {
    - Lista de capítulos organizados
    - Navegación entre capítulos
 
-5. **Sidebar Funcional**
+5. **🆕 Lector de Capítulos Completo (ChapterViewer)**
+   - Visualización página por página de capítulos completos
+   - Carga automática de imágenes desde MangaDX
+   - Interfaz optimizada para lectura inmersiva
+   - Manejo de estados de carga y error
+   - Diseño responsive para todos los dispositivos
+
+6. **Sidebar Funcional**
    - Perfil de usuario
    - Navegación principal
    - Recomendaciones de lectura
 
-6. **Responsive Design**
+7. **Responsive Design**
    - Adaptación mobile-first
    - Layouts flexibles
    - UX optimizada para todos los dispositivos
 
-### 🚧 Funcionalidades en Desarrollo
+## 📖 Experiencia de Lectura
 
-1. **Sistema de Recomendaciones Avanzado**
-   - Algoritmo ML para preferencias
-   - Análisis de comportamiento de usuario
-   - Recomendaciones colaborativas
+### El Corazón de LovArt: ChapterViewer
 
-2. **Interacciones Sociales**
-   - Sistema de seguimiento
-   - Comentarios en tiempo real
-   - Compartir en redes externas
+**¿Qué hace único a nuestro lector de manga?**
 
-3. **Gestión de Bibliotecas Personales**
-   - Listas de lectura personalizadas
-   - Marcadores de progreso
-   - Sincronización cross-device
+Nuestro ChapterViewer no es solo otro visor de imágenes. Es una experiencia cuidadosamente diseñada que pone al lector en el centro de todo.
+
+### 🎯 Flujo de Lectura Perfecto
+
+**Paso 1: Descubrimiento**
+- Navegas por el feed y encuentras un manga interesante
+- Haces clic en la imagen del post para ver más detalles
+
+**Paso 2: Exploración**
+- Llegas a la página detallada del manga
+- Ves la portada, descripción, autor y lista completa de capítulos
+- Cada capítulo muestra la fecha de publicación
+
+**Paso 3: Lectura Inmersiva**
+- Haces clic en cualquier capítulo de la lista
+- El ChapterViewer se activa automáticamente
+- Las páginas se cargan en alta resolución
+- Disfrutas de una experiencia de lectura fluida y sin interrupciones
+
+### 🚀 Tecnología de Vanguardia
+
+**Optimización de Carga:**
+```typescript
+// Sistema inteligente de carga de imágenes
+useEffect(() => {
+  async function fetchChapterPages() {
+    try {
+      setLoading(true);
+      // Obtención optimizada desde MangaDX
+      const res = await axios.get(`https://api.mangadx.org/at-home/server/${chapterId}`);
+      // Construcción eficiente de URLs
+      const images = chapter.data.map(filename => 
+        `${baseUrl}/data/${chapter.hash}/${filename}`
+      );
+      setPages(images);
+    } catch (error) {
+      // Manejo elegante de errores
+    } finally {
+      setLoading(false);
+    }
+  }
+}, [chapterId]);
+```
+
+**Estados Inteligentes:**
+- **Loading**: "Cargando capítulo..." con indicador visual elegante
+- **Error**: "No se encontraron imágenes" con mensaje amigable
+- **Success**: Experiencia de lectura completamente inmersiva
+
+### 🎨 Diseño Centrado en el Usuario
+
+**Interfaz Minimalista:**
+- Fondo oscuro para reducir fatiga visual
+- Imágenes centradas con sombras elegantes
+- Espaciado perfecto entre páginas
+- Sin distracciones innecesarias
+
+**Responsive por Naturaleza:**
+- Se adapta automáticamente a cualquier pantalla
+- Optimizado para lectura en móviles
+- Perfecto para tablets y desktop
 
 ## 📱 Capturas de Pantalla
 
@@ -449,36 +559,39 @@ const fetchMangaData = async () => {
 │  Description: ...               │
 ├─────────────────────────────────┤
 │  Chapters:                      │
-│  • Chapter 1: To You...         │
-│  • Chapter 2: That Day          │
+│  • Chapter 1: To You... [CLICK] │
+│  • Chapter 2: That Day [CLICK]  │
 │  • ...                          │
 └─────────────────────────────────┘
 ```
 
-## 🤝 Contribución
+### 🆕 Experiencia de Lectura (ChapterViewer)
+```
+┌─────────────────────────────────┐
+│     Lectura del capítulo        │
+├─────────────────────────────────┤
+│                                 │
+│        [Página 1 del Manga]     │
+│                                 │
+├─────────────────────────────────┤
+│                                 │
+│        [Página 2 del Manga]     │
+│                                 │
+├─────────────────────────────────┤
+│                                 │
+│        [Página 3 del Manga]     │
+│                                 │
+├─────────────────────────────────┤
+│              ...                │
+│       [Scroll infinito]         │
+└─────────────────────────────────┘
+```
 
-### Cómo Contribuir
-
-1. **Fork** el repositorio
-2. **Crear** una rama para la nueva feature
-3. **Realizar** los cambios necesarios
-4. **Escribir** tests cuando sea aplicable
-5. **Enviar** pull request con descripción detallada
-
-### Estándares de Código
-
-- Seguir las convenciones de **TypeScript**
-- Utilizar **ESLint** para mantener consistencia
-- Documentar funciones complejas
-- Mantener componentes pequeños y reutilizables
-
-### Reportar Bugs
-
-Utilizar el sistema de issues de GitHub con:
-- Descripción detallada del problema
-- Pasos para reproducir
-- Screenshots cuando sea relevante
-- Información del entorno (OS, browser, etc.)
+**¿Por qué esta experiencia es especial?**
+- **Sin interrupciones**: Las páginas fluyen naturalmente una tras otra
+- **Calidad máxima**: Imágenes en resolución original desde MangaDX
+- **Carga inteligente**: Solo descarga lo que necesitas ver
+- **Diseño inmersivo**: Te sumerges completamente en la historia
 
 ## 🚀 Roadmap Futuro
 
@@ -488,23 +601,30 @@ Utilizar el sistema de issues de GitHub con:
 - Notificaciones push
 - Integración con redes sociales
 
-### Fase 3 - Algoritmos Inteligentes
+### Fase 3 - Mejoras del Lector
+- **Modo nocturno avanzado** para ChapterViewer
+- **Marcadores de página** para recordar dónde te quedaste
+- **Zoom inteligente** para detalles de las viñetas
+- **Navegación por teclado** para lectores power-user
+- **Modo de lectura offline** para capítulos descargados
+
+### Fase 4 - Algoritmos Inteligentes
 - Machine Learning para recomendaciones
 - Análisis de sentimientos en comentarios
 - Personalización avanzada del feed
 - Predicción de contenido trending
 
-### Fase 4 - Contenido Generado por Usuario
+### Fase 5 - Contenido Generado por Usuario
 - Subida de artwork original
 - Herramientas de creación de comics
 - Marketplace para artistas
 - Sistema de monetización
 
-### Fase 5 - Móvil Nativo
-- Aplicación iOS nativa
-- Aplicación Android nativa
-- Sincronización cross-platform
-- Funcionalidades offline
+### Fase 6 - Móvil Nativo
+- Aplicación iOS nativa con ChapterViewer optimizado
+- Aplicación Android nativa con gestos de lectura
+- Sincronización cross-platform de progreso de lectura
+- Funcionalidades offline completas
 
 ## 📄 Licencia
 

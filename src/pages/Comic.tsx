@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 type Chapter = {
   id: string;
@@ -19,10 +19,13 @@ type MangaInfo = {
   chapters: Chapter[];
 };
 
+
+
 function Comic() {
   const { mangaTitle } = useParams(); // URL param: /comic/:mangaTitle
   const [manga, setManga] = useState<MangaInfo | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMangaData() {
@@ -50,12 +53,12 @@ function Comic() {
           "No hay descripción disponible para este manga.";
 
         const authorRel = mangaData.relationships.find(
-          (rel: string) => rel === "author"
+          (rel: string) => rel.type === "author"
         );
         const author = authorRel?.attributes?.name || "Autor desconocido";
 
         const coverRel = mangaData.relationships.find(
-          (rel: string) => rel === "cover_art"
+          (rel: string) => rel.type === "cover_art"
         );
         const coverFile = coverRel?.attributes?.fileName;
         const coverUrl = `https://uploads.mangadex.org/covers/${mangaId}/${coverFile}`;
@@ -116,6 +119,7 @@ function Comic() {
           <li
             key={chapter.id}
             className="bg-gray-800 p-3 rounded-xl shadow hover:bg-gray-700 cursor-pointer transition"
+            onClick={() => navigate(`/chapter/${chapter.id}`)}
           >
             <p className="font-semibold">
               Capítulo {chapter.attributes.chapter || "?"}:{" "}
