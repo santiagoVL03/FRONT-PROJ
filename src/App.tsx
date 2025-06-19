@@ -34,7 +34,7 @@ function App() {
           }
         />
         <Route
-          path="/comic"
+          path="/comic/:mangaTitle"
           element={
             <LayoutFeed
               mainContent={<Comic />}

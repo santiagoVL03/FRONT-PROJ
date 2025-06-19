@@ -1,4 +1,5 @@
 import MiniReel from '../components/MiniReel';
+import MangaPost from '../components/MangaPost';
 import Post from '../components/Post';
 function Feed() {
   const posts = [
@@ -8,14 +9,23 @@ function Feed() {
     { user: "@ana", imageId: 404, description: "Exploring new places!" },
     { user: "@carlos", imageId: 505, description: "Foodie adventures!" },
   ];
+
   const Reels = [
     { user: "@leo", imageId: 213, title: "Reel 1" },
     { user: "@maria", imageId: 272, title: "Reel 2" },
-    { user: "@jose", imageId: 213, title: "Reel 3" },
+    { user: "@jose", imageId: 221, title: "Reel 3" },
     { user: "@ana", imageId: 14, title: "Reel 4" },
     { user: "@carlos", imageId: 25, title: "Reel 5" },
     { user: "@luis", imageId: 361, title: "Reel 6" },
-  ]
+  ];
+
+  const mangas = [
+    { manganame: "bocchi" },
+    { manganame: "kawaii" },
+    { manganame: "attack on titan" },
+    { manganame: "boku no" },
+    { manganame: "my life" },
+  ];
 
   return (
     <div className="items-center justify-center">
@@ -27,12 +37,18 @@ function Feed() {
         </div>
       </div>
       <div className="max-w-md w-full">
+        {/* Post real desde MangaDex */}
+        {mangas.map((manga, index) => (
+          <MangaPost key={index} manganame={manga.manganame} />
+        ))}
+
+        {/* Posts locales simulados */}
         {posts.map((post, index) => (
           <Post key={index} username={post.user} imageId={post.imageId} description={post.description} />
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default Feed
+export default Feed;

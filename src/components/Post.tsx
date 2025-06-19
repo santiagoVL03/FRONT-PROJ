@@ -1,17 +1,33 @@
 import { Heart, MessageCircle, Send } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-function Post({ username, imageId, description }: { username: string; imageId: number, description?: string }) {
+function Post({
+  username,
+  imageId,
+  description,
+  pages,
+}: {
+  username: string;
+  imageId?: number;
+  description?: string;
+  pages?: string[];
+}) {
   const navigate = useNavigate();
   const handleImageClick = () => {
-    navigate(`/comic`);
+    const cleanUsername = username.replace(/^@/, ""); // elimina @ del inicio si está
+    navigate(`/comic/${cleanUsername}`);
   };
+
   return (
     <div className="max-w-md mx-auto bg-gray-900 rounded-2xl shadow-md overflow-hidden my-4 border border-gray-900 text-white">
       <div className="flex items-center px-4 py-3">
         <img
           className="h-10 w-10 rounded-full object-cover"
-          src={`https://picsum.photos/seed/user${imageId}/100/100`}
+          src={
+            imageId
+              ? `https://picsum.photos/seed/user${imageId}/100/100`
+              : `https://picsum.photos/seed/userdefault/100/100`
+          }
           alt="user"
         />
         <div className="ml-3">
@@ -19,12 +35,20 @@ function Post({ username, imageId, description }: { username: string; imageId: n
         </div>
       </div>
 
-      <img
-        onClick={handleImageClick}
-        className="w-full object-cover"
-        src={`https://picsum.photos/seed/post${imageId}/600/400`}
-        alt="post"
-      />
+      {/* Contenedor de imagen scrollable (Manga o simulación) */}
+      <div className="w-full h-[400px] overflow-y-scroll" onClick={handleImageClick}>
+        {pages && pages.length > 0 ? (
+          pages.map((src, index) => (
+            <img key={index} className="w-full" src={src} alt={`Page ${index + 1}`} />
+          ))
+        ) : (
+          <img
+            className="w-full object-cover"
+            src={`https://picsum.photos/seed/post${imageId}/600/4000`}
+            alt="post"
+          />
+        )}
+      </div>
 
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex space-x-4">
@@ -37,7 +61,7 @@ function Post({ username, imageId, description }: { username: string; imageId: n
       <div className="px-4 pb-4">
         <p className="text-sm">
           <span className="font-semibold mr-1">{username}</span>
-          {description || "This is a sample post description. It can be anything you want to share with your followers."}
+          {description || "Lee este episodio deslizando hacia abajo."}
         </p>
       </div>
     </div>
