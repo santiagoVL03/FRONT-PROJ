@@ -1,5 +1,3 @@
-import React from 'react';
-
 function MiniComic({ username, imageId, comicTitle }: { username: string; imageId: number; comicTitle: string }) {
   return (
     <div className="bg-gray-800 hover:bg-gray-900 p-2 rounded-lg shadow cursor-pointer transition">

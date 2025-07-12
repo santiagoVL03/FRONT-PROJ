@@ -53,12 +53,12 @@ function Comic() {
           "No hay descripción disponible para este manga.";
 
         const authorRel = mangaData.relationships.find(
-          (rel: string) => rel.type === "author"
+          (rel: { type: string }) => rel.type === "author"
         );
         const author = authorRel?.attributes?.name || "Autor desconocido";
 
         const coverRel = mangaData.relationships.find(
-          (rel: string) => rel.type === "cover_art"
+          (rel: { type: string }) => rel.type === "cover_art"
         );
         const coverFile = coverRel?.attributes?.fileName;
         const coverUrl = `https://uploads.mangadex.org/covers/${mangaId}/${coverFile}`;

@@ -6,6 +6,7 @@ import LayoutFeed from './layouts/LayoutFeed'
 import Sidebar from './pages/Sidebar';
 import Comic from './pages/Comic'
 import ChapterViewer from './components/ChapterViewer'
+import ReelViewer from './components/Reel/ReelViewer'
 
 function App() {
   return (
@@ -51,6 +52,15 @@ function App() {
               sidebarContent={<Sidebar />}
             />
           } 
+        />
+        <Route
+          path="/reel/:reelId"
+          element={
+            <LayoutFeed
+              mainContent={<ReelViewer/>} // Placeholder for reel content
+              sidebarContent={<Sidebar />}
+            />
+          }
         />
       </Routes>
     </Router>

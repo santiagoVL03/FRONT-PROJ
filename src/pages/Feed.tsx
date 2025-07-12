@@ -1,6 +1,7 @@
 import MiniReel from '../components/MiniReel';
 import MangaPost from '../components/MangaPost';
 import Post from '../components/Post';
+import MiniUploadPost from '../components/Post/MiniUploadPost';
 function Feed() {
   const posts = [
     { user: "@leo", imageId: 101, description: "Just enjoying the day!" },
@@ -35,6 +36,9 @@ function Feed() {
             <MiniReel key={index} username={reel.user} imageId={reel.imageId} reelTitle={reel.title} />
           ))}
         </div>
+      </div>
+      <div className='text-center mb-6'>
+        <MiniUploadPost/>
       </div>
       <div className="max-w-md w-full">
         {/* Post real desde MangaDex */}
