@@ -1,16 +1,18 @@
 import MiniReel from '../components/MiniReel';
-import MangaPost from '../components/MangaPost';
-import Post from '../components/Post';
+import MangaCustomPost from '../components/Post/MangaCustomPost';
+import MangaPost from '../components/Post/MangaPost';
 import MiniUploadPost from '../components/Post/MiniUploadPost';
-function Feed() {
-  const posts = [
-    { user: "@leo", imageId: 101, description: "Just enjoying the day!" },
-    { user: "@maria", imageId: 202, description: "Loving this weather!" },
-    { user: "@jose", imageId: 303, description: "Can't wait for the weekend!" },
-    { user: "@ana", imageId: 404, description: "Exploring new places!" },
-    { user: "@carlos", imageId: 505, description: "Foodie adventures!" },
-  ];
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 
+interface MangaPostData {
+  title: string;
+  author: string;
+  description: string;
+  id_manga: string;
+}
+
+function Feed() {
   const Reels = [
     { user: "@leo", imageId: 213, title: "Reel 1" },
     { user: "@maria", imageId: 272, title: "Reel 2" },
@@ -28,6 +30,35 @@ function Feed() {
     { manganame: "my life" },
   ];
 
+  const [mangaPosts, setMangaPosts] = useState<MangaPostData[]>([]);
+
+  async function get_metadata_for_mangas() {
+    try {
+      const result = await axios.get('http://localhost:5000/api/v1/get_feed_mangas');
+      return result.data;
+    } catch (error) {
+      console.error("Error fetching manga metadata:", error);
+      return { comics: [] };
+    }
+  }
+
+  useEffect(() => {
+    get_metadata_for_mangas()
+      .then((data: { comics: { name: string; author: string; description: string; id_manga: string }[] }) => {
+        const comics = data.comics || [];
+        const posts = comics.map((manga) => ({
+          title: manga.name,
+          author: manga.author,
+          description: manga.description,
+          id_manga: manga.id_manga,
+        }));
+        setMangaPosts(posts);
+      })
+      .catch((error) => {
+        console.error("Error fetching manga data:", error);
+      });
+  }, []);
+
   return (
     <div className="items-center justify-center">
       <div className="w-full mb-4">
@@ -37,18 +68,24 @@ function Feed() {
           ))}
         </div>
       </div>
-      <div className='text-center mb-6'>
-        <MiniUploadPost/>
+
+      <div className="text-center mb-6">
+        <MiniUploadPost />
       </div>
-      <div className="max-w-md w-full">
-        {/* Post real desde MangaDex */}
+
+      <div className="max-w-md w-full" id="manga-posts">
         {mangas.map((manga, index) => (
-          <MangaPost key={index} manganame={manga.manganame} />
+          <MangaPost key={`static-${index}`} manganame={manga.manganame} />
         ))}
 
-        {/* Posts locales simulados */}
-        {posts.map((post, index) => (
-          <Post key={index} username={post.user} imageId={post.imageId} description={post.description} />
+        {mangaPosts.map((manga, index) => (
+          <MangaCustomPost
+            key={`custom-${index}`}
+            manganame={manga.title}
+            author={manga.author}
+            description={manga.description}
+            image_id={manga.id_manga}
+          />
         ))}
       </div>
     </div>

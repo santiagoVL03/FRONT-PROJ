@@ -2,7 +2,8 @@ import React from 'react';
 
 function MiniUploadPost() {
   const handleClick = () => {
-    alert("Mostrar formulario real para subir cómic...");
+    // Al dar click, redirigir a la página de creación de publicaciones
+    window.location.href = '/uploadcomic';
   };
 
   return (

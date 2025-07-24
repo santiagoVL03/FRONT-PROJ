@@ -7,6 +7,7 @@ import Sidebar from './pages/Sidebar';
 import Comic from './pages/Comic'
 import ChapterViewer from './components/ChapterViewer'
 import ReelViewer from './components/Reel/ReelViewer'
+import CreatePost from './components/Post/CreatePost'
 
 function App() {
   return (
@@ -58,6 +59,15 @@ function App() {
           element={
             <LayoutFeed
               mainContent={<ReelViewer/>} // Placeholder for reel content
+              sidebarContent={<Sidebar />}
+            />
+          }
+        />
+        <Route
+          path="/uploadcomic"
+          element={
+            <LayoutFeed
+              mainContent={<CreatePost />} // Placeholder for reel list
               sidebarContent={<Sidebar />}
             />
           }

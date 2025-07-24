@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -19,10 +19,8 @@ type MangaInfo = {
   chapters: Chapter[];
 };
 
-
-
 function Comic() {
-  const { mangaTitle } = useParams(); // URL param: /comic/:mangaTitle
+  const { mangaTitle } = useParams();
   const [manga, setManga] = useState<MangaInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -31,8 +29,8 @@ function Comic() {
     async function fetchMangaData() {
       try {
         const baseUrl = "https://api.mangadex.org";
+        // const url2 = "https://localhost:3000/api/manga";
 
-        // 1. Buscar el manga
         const mangaRes = await axios.get(`${baseUrl}/manga`, {
           params: {
             title: mangaTitle,
@@ -63,7 +61,6 @@ function Comic() {
         const coverFile = coverRel?.attributes?.fileName;
         const coverUrl = `https://uploads.mangadex.org/covers/${mangaId}/${coverFile}`;
 
-        // 2. Obtener lista de capítulos
         const chaptersRes = await axios.get(
           `${baseUrl}/manga/${mangaId}/feed`,
           {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Post from "./Post";
+import Post from "../Post";
 
 type MangaPostProps = {
   manganame?: string; // nombre del manga a buscar
@@ -16,7 +16,6 @@ function MangaPost({ manganame = "Naruto" }: MangaPostProps) {
       try {
         setLoading(true);
 
-        // 1. Buscar el manga por título
         const mangaResponse = await axios.get(`${baseUrl}/manga`, {
           params: {
             title: manganame,
@@ -35,7 +34,6 @@ function MangaPost({ manganame = "Naruto" }: MangaPostProps) {
 
         const mangaId = mangaData[0].id;
 
-        // 2. Buscar el primer capítulo traducido al inglés
         const chapterResponse = await axios.get(`${baseUrl}/manga/${mangaId}/feed`, {
           params: {
             translatedLanguage: ['en'],
@@ -53,7 +51,6 @@ function MangaPost({ manganame = "Naruto" }: MangaPostProps) {
 
         const chapterId = chapterData[0].id;
 
-        // 3. Obtener imágenes del capítulo
         const atHomeResponse = await axios.get(`${baseUrl}/at-home/server/${chapterId}`);
         const { baseUrl: imgBaseUrl, chapter } = atHomeResponse.data;
 
@@ -85,6 +82,7 @@ function MangaPost({ manganame = "Naruto" }: MangaPostProps) {
       username={`@${manganame}`}
       description={`Primer capítulo de ${manganame}`}
       pages={pages}
+      from="manga"
     />
   );
 }
