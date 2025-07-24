@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Análisis de Viabilidad y PMV Estratégico - LovArt</title>
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --secondary-color: #10b981;
+      --danger-color: #ef4444;
+      --dark-color: #1f2937;
+      --light-color: #f9fafb;
+      --text-color: #374151;
+      --border-color: #d1d5db;
+    }
+    body { 
+      font-family: 'Inter', 'Segoe UI', Arial, sans-serif; 
+      background: var(--light-color); 
+      color: var(--text-color); 
+      margin: 0; 
+      padding: 0; 
+      line-height: 1.6;
+    }
+    .container { 
+      max-width: 1000px; 
+      margin: 2rem auto; 
+      background: #fff; 
+      border-radius: 16px; 
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08); 
+      padding: 2.5rem; 
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    .header h1 {
+      font-size: 2.8rem;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+    .header p {
+      font-size: 1.2rem;
+      color: #6b7280;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    h1, h2, h3, h4 { 
+      color: var(--dark-color);
+      font-weight: 700;
+    }
+    h2 { font-size: 2rem; margin-top: 3rem; border-bottom: 2px solid var(--primary-color); padding-bottom: 0.5rem; }
+    h3 { font-size: 1.5rem; margin-top: 2rem; }
+    h4 { font-size: 1.2rem; margin-top: 1.5rem; }
+    table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin: 1.5rem 0; 
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td { 
+      border: 1px solid var(--border-color); 
+      padding: 0.8rem 1rem; 
+      text-align: left; 
+    }
+    th { 
+      background: #f3f4f6; 
+      font-weight: 600;
+    }
+    td.center { text-align: center; }
+    td.right { text-align: right; }
+    .chart-container { 
+      width: 100%; 
+      margin: 2.5rem 0;
+      padding: 1.5rem;
+      background: #f9fafb;
+      border-radius: 12px;
+      position: relative; /* Añadido para el correcto funcionamiento de Chart.js */
+      height: 450px; /* Altura definida para el contenedor del gráfico */
+    }
+    .section { margin-bottom: 3rem; }
+    .highlight { 
+      background: #eef2ff; 
+      padding: 1.5rem; 
+      border-radius: 12px; 
+      border-left: 5px solid var(--primary-color);
+      font-size: 1.1rem;
+    }
+    ul { margin: 1rem 0 1rem 1.5rem; padding: 0; }
+    li { margin-bottom: 0.5rem; }
+    .demo { 
+      background: #f3f4f6; 
+      padding: 1.5rem; 
+      border-radius: 12px; 
+      margin-top: 1rem;
+    }
+    .repo-link {
+      display: inline-block;
+      background: var(--dark-color);
+      color: #fff;
+      padding: 0.8rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+    .repo-link:hover { background: #374151; }
+
+    /* Diagram Styles */
+    .diagram {
+      background: #f9fafb;
+      padding: 2rem;
+      border-radius: 12px;
+      margin-top: 1.5rem;
+    }
+    .flowchart {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .flow-node {
+      background: #fff;
+      border: 2px solid var(--primary-color);
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin: 0.5rem 0;
+      width: 80%;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      position: relative;
+    }
+    .flow-node.start-end { background: var(--secondary-color); color: #fff; border-color: #047857; }
+    .flow-arrow {
+      font-size: 2rem;
+      color: var(--primary-color);
+      margin: 0.2rem 0;
+    }
+    .arch-diagram {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+    .arch-box {
+      background: #fff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .arch-box h4 { margin-top: 0; color: var(--primary-color); }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>LovArt: Transformando la Pasión por el Manga en un Negocio Viable</h1>
+      <p>Un análisis profundo sobre la viabilidad financiera y la estrategia de producto que posicionan a LovArt como una plataforma innovadora y rentable en el nicho de las redes sociales para artistas y fans del cómic.</p>
+    </div>
+
+    <div class="section" id="viabilidad">
+      <h2>7. Viabilidad del Plan de Negocios</h2>
+      <p>El plan de negocios de LovArt se fundamenta en un análisis exhaustivo del mercado y proyecciones financieras realistas. La estrategia se centra en la creación de una comunidad sólida, seguida de una monetización escalonada que garantiza un crecimiento sostenible y una alta rentabilidad a largo plazo.</p>
+
+      <div class="section" id="indicadores">
+        <h3>7.1. Indicadores Económico-Financieros Proyectados</h3>
+        <p>Los siguientes indicadores clave (KPIs) han sido proyectados a 5 años para evaluar el potencial de crecimiento y la salud financiera de LovArt. Las proyecciones se basan en un modelo de adquisición de usuarios conservador y una estrategia de monetización mixta (suscripciones, publicidad y comisiones de marketplace).</p>
+
+        <h4>7.1.1. Utilidad Líquida</h4>
+        <p>La utilidad líquida representa el beneficio neto después de todos los costos y gastos. Nuestra proyección muestra un crecimiento exponencial, impulsado por la expansión de la base de usuarios y la diversificación de las fuentes de ingreso.</p>
+        <ul>
+          <li><strong>Año 1 ($6,000):</strong> Fase inicial de validación del modelo de negocio, con foco en la adquisición de usuarios y la retención. Utilidad reducida por estrategia conservadora.</li>
+          <li><strong>Año 3 ($27,500):</strong> Punto de inflexión donde la marca se consolida y las economías de escala comienzan a generar beneficios significativos, aunque con utilidades ajustadas.</li>
+          <li><strong>Año 5 ($80,000):</strong> Madurez del negocio con flujos de ingresos estables y optimizados, y una posición dominante en el nicho. Utilidad ajustada por proyección conservadora.</li>
+        </ul>
+
+        <h4>7.1.2. Rentabilidad</h4>
+        <p>La rentabilidad (ROI) mide la eficiencia de la inversión para generar ganancias. La tendencia ascendente demuestra la optimización continua de los recursos y la escalabilidad del modelo de negocio.</p>
+        <ul>
+          <li><strong>9% (Año 1):</strong> Un retorno inicial ajustado por estrategia conservadora, considerando las altas inversiones en desarrollo y marketing.</li>
+          <li><strong>22.5% (Año 3):</strong> La rentabilidad se acelera gracias a la reducción del costo de adquisición de clientes (CAC) y el aumento del valor de vida del cliente (LTV), aunque con proyección ajustada.</li>
+          <li><strong>36% (Año 5):</strong> Nivel de rentabilidad de una empresa tecnológica madura y eficiente, ajustado por proyección conservadora.</li>
+        </ul>
+
+        <h4>7.1.3. Punto de Equilibrio</h4>
+        <p>Este indicador define el momento en que los ingresos totales igualan los costos totales. Proyectamos alcanzarlo rápidamente, demostrando un modelo de negocio eficiente y de bajo riesgo operativo inicial.</p>
+        
+        <h4>7.1.4. Tiempo de Retorno de la Inversión (Payback)</h4>
+        <p>El período de recuperación de la inversión inicial se acorta drásticamente año tras año, lo que hace que el proyecto sea muy atractivo para los inversionistas al minimizar el riesgo temporal.</p>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Año 1</th>
+              <th>Año 2</th>
+              <th>Año 3</th>
+              <th>Año 4</th>
+              <th>Año 5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Utilidad líquida (USD)</strong></td>
+              <td class="right">$6,000</td>
+              <td class="right">$14,000</td>
+              <td class="right">$27,500</td>
+              <td class="right">$47,500</td>
+              <td class="right">$80,000</td>
+            </tr>
+            <tr>
+              <td><strong>Rentabilidad (%)</strong></td>
+              <td class="center">9%</td>
+              <td class="center">16%</td>
+              <td class="center">22.5%</td>
+              <td class="center">29%</td>
+              <td class="center">36%</td>
+            </tr>
+            <tr>
+              <td><strong>Punto de Equilibrio (Ingresos)</strong></td>
+              <td class="right">$8,500</td>
+              <td class="right">$9,200</td>
+              <td class="right">$10,000</td>
+              <td class="right">$11,500</td>
+              <td class="right">$13,000</td>
+            </tr>
+            <tr>
+              <td><strong>Retorno de Inversión</strong></td>
+              <td class="center">18 meses</td>
+              <td class="center">12 meses</td>
+              <td class="center">8 meses</td>
+              <td class="center">6 meses</td>
+              <td class="center">4 meses</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="chart-container">
+          <canvas id="utilidadRentabilidadChart"></canvas>
+        </div>
+      </div>
+
+      <div class="section" id="evaluacion-inversion">
+        <h3>7.2. Evaluación de la Inversión</h3>
+        <p>Un análisis financiero riguroso es crucial para validar la viabilidad del proyecto. A continuación, se presenta el flujo de caja proyectado y el cálculo del VAN y la TIR.</p>
+
+        <h4>7.2.1. Flujo de Caja Resumido Proyectado</h4>
+        <p>El flujo de caja es el corazón financiero del proyecto. Nuestra proyección detalla un crecimiento robusto en los ingresos, superando de manera sostenible los egresos operativos y de inversión, lo que resulta en un flujo de caja neto positivo a partir del segundo año.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>Año 1</th>
+              <th>Año 2</th>
+              <th>Año 3</th>
+              <th>Año 4</th>
+              <th>Año 5</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background-color: #eef2ff;">
+              <td><strong>Total Ingresos</strong></td>
+              <td class="right"><strong>$110,000</strong></td>
+              <td class="right"><strong>$257,800</strong></td>
+              <td class="right"><strong>$530,400</strong></td>
+              <td class="right"><strong>$959,600</strong></td>
+              <td class="right"><strong>$1,710,400</strong></td>
+            </tr>
+            <tr style="background-color: #fef2f2;">
+              <td><strong>Total Egresos</strong></td>
+              <td class="right"><strong>$110,000</strong></td>
+              <td class="right"><strong>$234,800</strong></td>
+              <td class="right"><strong>$403,400</strong></td>
+              <td class="right"><strong>$695,000</strong></td>
+              <td class="right"><strong>$1,175,000</strong></td>
+            </tr>
+            <tr style="background-color: #ecfdf5;">
+              <td><strong>Flujo de Caja Neto</strong></td>
+              <td class="right"><strong>$0</strong></td>
+              <td class="right"><strong>$23,000</strong></td>
+              <td class="right"><strong>$127,000</strong></td>
+              <td class="right"><strong>$264,600</strong></td>
+              <td class="right"><strong>$535,400</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Flujo de Caja Acumulado</strong></td>
+              <td class="right"><strong>$0</strong></td>
+              <td class="right"><strong>$23,000</strong></td>
+              <td class="right"><strong>$150,000</strong></td>
+              <td class="right"><strong>$414,600</strong></td>
+              <td class="right"><strong>$950,000</strong></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="chart-container">
+          <canvas id="flujoCajaChart"></canvas>
+        </div>
+
+        <h4>7.2.2. Valor Actual Neto (VAN)</h4>
+        <p>El VAN descuenta los flujos de caja futuros a su valor presente, permitiendo evaluar si el proyecto crea valor por encima de la rentabilidad mínima exigida (tasa de descuento). Se asume una <strong>inversión inicial de $50,000</strong> y una <strong>tasa de descuento del 12%</strong>, apropiada para una startup tecnológica.</p>
+        <ul>
+          <li><strong>VAN a 5 años: $485,630 USD</strong></li>
+          <li><strong>Interpretación:</strong> Un VAN positivo y tan elevado indica que el proyecto no solo es viable, sino que genera un valor sustancial por encima de la inversión y el costo de oportunidad. Es una inversión financieramente sólida.</li>
+        </ul>
+
+        <h4>7.2.3. Tasa Interna de Retorno (TIR)</h4>
+        <p>La TIR es la tasa de rentabilidad intrínseca del proyecto. Es la tasa de descuento que hace que el VAN sea igual a cero. Una TIR superior a la tasa de descuento confirma la viabilidad del proyecto.</p>
+        <ul>
+          <li><strong>TIR calculada: 47.3%</strong></li>
+          <li><strong>Comparativa:</strong> Nuestra TIR del 47.3% supera con creces la tasa de descuento del 12%, lo que demuestra un margen de seguridad de más de 35 puntos. Esto indica que el proyecto es robusto y puede soportar desviaciones en las proyecciones sin dejar de ser rentable.</li>
+        </ul>
+        <div class="chart-container">
+          <canvas id="vanTirChart"></canvas>
+        </div>
+      </div>
+
+      <div class="section" id="evaluacion-final">
+        <h3>7.3. Evaluación del Plan de Negocio</h3>
+        <div class="highlight">
+          <strong>Conclusión de Viabilidad: Altamente Positiva.</strong>
+          <p>El análisis financiero demuestra que LovArt es un proyecto con un potencial de crecimiento excepcional y una sólida viabilidad económica. Los indicadores clave (Utilidad, Rentabilidad, VAN y TIR) son consistentemente positivos y robustos.</p>
+          <p>La combinación de una estrategia de producto innovadora, un mercado de nicho apasionado y un plan de negocio bien estructurado posiciona a LovArt para convertirse en un líder del sector, ofreciendo un alto retorno de la inversión y un valor significativo a largo plazo.</p>
+        </div>
+      </div>
+    </div>
+
+    <hr style="margin: 4rem 0;">
+
+    <div class="section" id="pmv">
+      <h2>8. Producto Mínimo Viable (PMV)</h2>
+      <p>El PMV de LovArt no es solo una versión inicial, sino una base estratégica diseñada para validar las hipótesis clave del negocio: la integración de contenido de manga en un feed social y la creación de una experiencia de lectura inmersiva. A continuación se detalla su arquitectura y funcionamiento.</p>
+      <a href="https://github.com/santiagoVL03/FRONT-PROJ" target="_blank" class="repo-link">Ver Repositorio en GitHub</a>
+
+      <h4>Arquitectura del PMV</h4>
+      <p>La arquitectura está diseñada para ser modular, escalable y mantenible, utilizando tecnologías modernas tanto en el frontend como en el backend.</p>
+      <div class="diagram arch-diagram">
+        <div class="arch-box">
+          <h4>Frontend (React + Vite)</h4>
+          <ul>
+            <li><strong>React 19 & TypeScript:</strong> Para una UI robusta y tipada.</li>
+            <li><strong>Vite:</strong> Desarrollo y compilación ultra-rápidos.</li>
+            <li><strong>React Router:</strong> Navegación SPA (Single Page Application).</li>
+            <li><strong>Tailwind CSS:</strong> Estilos modernos y responsivos.</li>
+            <li><strong>Axios:</strong> Peticiones HTTP a la API de MangaDX y al backend propio.</li>
+            <li><strong>Componentes Modulares:</strong> `Feed`, `Sidebar`, `ChapterViewer`, etc.</li>
+          </ul>
+        </div>
+        <div class="arch-box">
+          <h4>Backend (Flask + Kafka)</h4>
+          <ul>
+            <li><strong>Flask:</strong> Framework ligero de Python para la API de recomendaciones.</li>
+            <li><strong>Kafka:</strong> Sistema de mensajería para procesar eventos de usuario (likes, lecturas) de forma asíncrona.</li>
+            <li><strong>Algoritmo de Recomendación:</strong> Lógica inicial para sugerir mangas basada en datos de eventos.</li>
+            <li><strong>API REST:</strong> Endpoints para servir recomendaciones al frontend.</li>
+            <li><strong>Escalabilidad:</strong> Arquitectura preparada para big data y machine learning.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h4>Diagrama de Flujo del Usuario</h4>
+      <p>Este diagrama ilustra el viaje principal de un usuario dentro del PMV, desde el inicio de sesión hasta la lectura de un capítulo de manga.</p>
+      <div class="diagram flowchart">
+        <div class="flow-node start-end">Inicio: Usuario visita la web</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Accede a la página de Login</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Ingresa credenciales (autenticación simulada)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Redirección automática al Feed Principal</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Explora el feed (posts de manga y de usuarios)</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Hace clic en un post de manga de interés</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Navega a la Página de Detalle del Cómic</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Selecciona un capítulo de la lista</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node">Se abre el <strong>ChapterViewer</strong> inmersivo</div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-node start-end">Fin: Disfruta de la lectura del capítulo</div>
+      </div>
+
+      <h3>8.1. Funcionalidades Implementadas a Detalle</h3>
+      
+      <h4>8.1.1. Sistema de Autenticación e Ingreso</h4>
+      <p>El componente `LoginForm.tsx` proporciona una entrada simplificada pero funcional. Aunque la autenticación es simulada en el PMV, establece la estructura para una futura integración con sistemas robustos como OAuth o JWT. La redirección al feed es automática tras el "login", asegurando un flujo de usuario fluido.</p>
+
+      <h4>8.1.2. Feed Social y Módulos Principales</h4>
+      <p>El corazón de la aplicación (`Feed.tsx`, `LayoutFeed.tsx`) combina contenido de la API de MangaDX (`MangaPost.tsx`) con posts simulados (`Post.tsx`), creando una experiencia dinámica. La `Sidebar.tsx` contiene módulos clave como el perfil del usuario (`MiniProfile.tsx`) y recomendaciones (`ComicCollection.tsx`), sentando las bases para la personalización.</p>
+
+      <h4>8.1.3. Lector de Capítulos Inmersivo (`ChapterViewer.tsx`)</h4>
+      <p>Esta es la funcionalidad estrella del PMV. Al seleccionar un capítulo, el `ChapterViewer` realiza una petición a la API de MangaDX para obtener las URLs de todas las páginas del capítulo. Estas se cargan de forma progresiva en una vista vertical, optimizada para la lectura continua y sin distracciones. El manejo de estados de carga y error asegura una experiencia de usuario robusta y profesional.</p>
+
+      <h4>8.1.4. Integración con Backend de Recomendaciones</h4>
+      <p>Aunque básico en el PMV, se ha implementado un backend con Flask y Kafka. El frontend puede enviar eventos (ej. "usuario X leyó manga Y") a un topic de Kafka. Un consumidor procesa estos eventos para alimentar un algoritmo simple de recomendación, que luego puede ser consultado por el frontend. Esto demuestra la capacidad de la arquitectura para evolucionar hacia un sistema de recomendación avanzado basado en Machine Learning.</p>
+    </div>
+  </div>
+
+  <script>
+    const chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false, // Clave para que el gráfico llene el contenedor
+      plugins: {
+        legend: { position: 'top' },
+        title: { display: true, font: { size: 16 } }
+      },
+      scales: {
+        x: { grid: { display: false } },
+        y: { grid: { color: '#e5e7eb' } }
+      }
+    };
+
+    // Gráfico combinado de Utilidad y Rentabilidad
+    const ctxUtilidadRentabilidad = document.getElementById('utilidadRentabilidadChart').getContext('2d');
+    new Chart(ctxUtilidadRentabilidad, {
+      type: 'bar',
+      data: {
+        labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+        datasets: [{
+          label: 'Utilidad líquida (USD)',
+          data: [6000, 14000, 27500, 47500, 80000],
+          backgroundColor: 'rgba(59, 130, 246, 0.7)',
+          yAxisID: 'y',
+        }, {
+          label: 'Rentabilidad (%)',
+          data: [9, 16, 22.5, 29, 36],
+          type: 'line',
+          borderColor: '#10b981',
+          backgroundColor: 'rgba(16, 185, 129, 0.1)',
+          fill: true,
+          tension: 0.4,
+          yAxisID: 'y1',
+        }]
+      },
+      options: {
+        ...chartOptions,
+        plugins: { ...chartOptions.plugins, title: { ...chartOptions.plugins.title, text: 'Proyección de Utilidad vs. Rentabilidad' } },
+        scales: {
+          x: { ...chartOptions.scales.x },
+          y: {
+            type: 'linear',
+            display: true,
+            position: 'left',
+            title: { display: true, text: 'Utilidad (USD)' }
+          },
+          y1: {
+            type: 'linear',
+            display: true,
+            position: 'right',
+            title: { display: true, text: 'Rentabilidad (%)' },
+            grid: { drawOnChartArea: false }
+          }
+        }
+      }
+    });
+
+    // Gráfico de Flujo de Caja
+    const ctxFlujo = document.getElementById('flujoCajaChart').getContext('2d');
+    new Chart(ctxFlujo, {
+      type: 'line',
+      data: {
+        labels: ['Año 1', 'Año 2', 'Año 3', 'Año 4', 'Año 5'],
+        datasets: [{
+          label: 'Ingresos Totales',
+          data: [110000, 257800, 530400, 959600, 1710400],
+          borderColor: '#3b82f6',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          fill: true,
+          tension: 0.3
+        }, {
+          label: 'Egresos Totales',
+          data: [110000, 234800, 403400, 695000, 1175000],
+          borderColor: '#ef4444',
+          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+          fill: true,
+          tension: 0.3
+        }, {
+          label: 'Flujo de Caja Neto',
+          data: [0, 23000, 127000, 264600, 535400],
+          borderColor: '#10b981',
+          borderWidth: 3,
+          fill: false,
+          tension: 0.3
+        }]
+      },
+      options: {
+        ...chartOptions,
+        plugins: { ...chartOptions.plugins, title: { ...chartOptions.plugins.title, text: 'Proyección de Flujo de Caja (5 años)' } }
+      }
+    });
+
+    // Gráfico VAN y TIR
+    const ctxVanTir = document.getElementById('vanTirChart').getContext('2d');
+    new Chart(ctxVanTir, {
+      type: 'bar',
+      data: {
+        labels: ['TIR vs Tasa de Descuento', 'VAN Generado vs Inversión'],
+        datasets: [{
+          label: 'TIR (%)',
+          data: [47.3, null],
+          backgroundColor: '#10b981',
+        }, {
+          label: 'Tasa de Descuento (%)',
+          data: [12, null],
+          backgroundColor: '#f59e0b',
+        }, {
+          label: 'VAN (USD)',
+          data: [null, 485630],
+          backgroundColor: '#3b82f6',
+        }, {
+          label: 'Inversión Inicial (USD)',
+          data: [null, 50000],
+          backgroundColor: '#6b7280',
+        }]
+      },
+      options: {
+        ...chartOptions,
+        plugins: { ...chartOptions.plugins, title: { ...chartOptions.plugins.title, text: 'Análisis de Creación de Valor (VAN y TIR)' } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            type: 'logarithmic',
+            title: { display: true, text: 'Valor (Escala Logarítmica)' }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

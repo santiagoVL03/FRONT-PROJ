@@ -7,7 +7,7 @@ function Post({
   imageIdS, // Para CustomPost
   description,
   pages,
-  from = 'post', // 'post' or 'manga' or 'custom-post'
+  from = 'post',
   manganame,
 }: {
   username: string;
@@ -41,11 +41,11 @@ function Post({
           alt="post"
         />
       );
-    } else {
+    } else if (from === 'manga-custom-post') {
       return (
         <img
           className="w-full object-cover"
-          src={`http://localhost:4000/api/v1/get_custom_post/${imageIdS}`}
+          src={`http://localhost:5000/api/v1/get_comic_cover?comic_id=${imageIdS}`}
           alt="custom post"
         />
       );
@@ -89,10 +89,10 @@ function Post({
       </div>
 
       <div className="px-4 pb-4">
+        {render_manga_name()}
         <p className="text-sm">
           <span className="font-semibold mr-1">{username}</span>
           {description || "Lee este episodio deslizando hacia abajo."}
-          {render_manga_name()}
         </p>
       </div>
     </div>

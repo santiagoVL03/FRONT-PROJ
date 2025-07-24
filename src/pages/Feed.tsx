@@ -24,7 +24,7 @@ function Feed() {
 
   const mangas = [
     { manganame: "bocchi" },
-    { manganame: "kawaii" },
+    { manganame: "kawai" },
     { manganame: "attack on titan" },
     { manganame: "boku no" },
     { manganame: "my life" },
@@ -34,8 +34,11 @@ function Feed() {
 
   async function get_metadata_for_mangas() {
     try {
-      const result = await axios.get('http://localhost:5000/api/v1/get_feed_mangas');
-      return result.data;
+      const result = await axios.get('http://localhost:5000/api/v1/get_feed_mangas', {
+        timeout: 30000 // 10 segundos
+      });
+      console.log("Manga metadata fetched successfully:", result.data);
+      return result.data.data;
     } catch (error) {
       console.error("Error fetching manga metadata:", error);
       return { comics: [] };
@@ -44,14 +47,17 @@ function Feed() {
 
   useEffect(() => {
     get_metadata_for_mangas()
-      .then((data: { comics: { name: string; author: string; description: string; id_manga: string }[] }) => {
+      .then((data: { comics: { title: string; author: string; content: string; comic_id: string }[] }) => {
+        console.log("Fetched manga data:", data);
         const comics = data.comics || [];
+        console.log("Comics data:", comics);
         const posts = comics.map((manga) => ({
-          title: manga.name,
+          title: manga.title, // antes era manga.name
           author: manga.author,
-          description: manga.description,
-          id_manga: manga.id_manga,
+          description: manga.content, // antes era manga.description
+          id_manga: manga.comic_id, // antes era manga.id_manga
         }));
+        console.log("Manga posts:", posts);
         setMangaPosts(posts);
       })
       .catch((error) => {
@@ -74,11 +80,8 @@ function Feed() {
       </div>
 
       <div className="max-w-md w-full" id="manga-posts">
-        {mangas.map((manga, index) => (
-          <MangaPost key={`static-${index}`} manganame={manga.manganame} />
-        ))}
-
         {mangaPosts.map((manga, index) => (
+          console.log("Static manga post:", manga.title),
           <MangaCustomPost
             key={`custom-${index}`}
             manganame={manga.title}
@@ -86,6 +89,10 @@ function Feed() {
             description={manga.description}
             image_id={manga.id_manga}
           />
+        ))}
+
+        {mangas.map((manga, index) => (
+          <MangaPost key={`static-${index}`} manganame={manga.manganame} />
         ))}
       </div>
     </div>
